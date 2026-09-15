@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Sesi WhatsApp Baileys (jangan di-commit)
+auth_info/
+
+# Environment variables
+.env
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

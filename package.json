@@ -1,0 +1,29 @@
+{
+  "name": "chatbot-wa-ams",
+  "version": "1.0.0",
+  "description": "Chatbot WhatsApp untuk Layanan Bantuan AMS (Aplikasi Manajemen Sertifikat)",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "generate-images": "node scripts/generate-dummy-images.js",
+    "test": "node tests/test-tahap7.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "chatbot",
+    "ams",
+    "baileys"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "docx": "^9.7.1",
+    "pino": "^10.3.1",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
