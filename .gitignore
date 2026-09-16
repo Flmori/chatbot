@@ -14,3 +14,6 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Tools Agent AI (hanya disimpan di lokal)
+.agents/

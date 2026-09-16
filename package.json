@@ -7,7 +7,7 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "generate-images": "node scripts/generate-dummy-images.js",
-    "test": "node tests/test-tahap7.js"
+    "test": "node tests/test-tahap8.js"
   },
   "keywords": [
     "whatsapp",

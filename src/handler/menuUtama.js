@@ -1,5 +1,7 @@
 const { sendText } = require('../utils/sender');
 const { startPengajuanBaru } = require('./pengajuanBaru');
+const { startPembaruanExpired } = require('./pembaruanExpired');
+const { startResetPassphrase } = require('./resetPassphrase');
 const { startLiveAgen } = require('./liveAgen');
 const config = require('../config');
 
@@ -12,8 +14,8 @@ const MENU_UTAMA_TEXT = `🤖 Halo, selamat datang di Layanan Bantuan Tanda Tang
 Silakan pilih layanan:
 
 1️⃣ Pengajuan Baru
-2️⃣ Pembaharuan / Expired (Segera Hadir)
-3️⃣ Reset Passphrase (Segera Hadir)
+2️⃣ Pembaharuan / Expired
+3️⃣ Reset Passphrase
 4️⃣ Live Agen
 
 Ketik angka sesuai kebutuhan Anda.`;
@@ -23,8 +25,8 @@ const INVALID_INPUT_TEXT = `⚠️ Pilihan tidak valid.
 Silakan pilih salah satu menu:
 
 1️⃣ Pengajuan Baru
-2️⃣ Pembaharuan / Expired (Segera Hadir)
-3️⃣ Reset Passphrase (Segera Hadir)
+2️⃣ Pembaharuan / Expired
+3️⃣ Reset Passphrase
 4️⃣ Live Agen`;
 
 const STANDBY_TEXT = `ℹ️ Layanan ini sedang dalam proses penyiapan SOP terbaru.
@@ -51,12 +53,12 @@ async function handleMenuUtama(sock, jid, input, updateState) {
   if (targetMenu) {
     if (targetMenu === 'PENGAJUAN_ASK') {
       await startPengajuanBaru(sock, jid);
+    } else if (targetMenu === 'PEMBARUAN_ASK') {
+      await startPembaruanExpired(sock, jid);
+    } else if (targetMenu === 'PASSPHRASE_GUIDE') {
+      await startResetPassphrase(sock, jid);
     } else if (targetMenu === 'LIVE_AGEN') {
       await startLiveAgen(sock, jid);
-    } else {
-      // Menu 2, 3: standby (Segera Hadir)
-      updateState(jid, { menu: targetMenu, step: 'STANDBY' });
-      await sendText(sock, jid, STANDBY_TEXT);
     }
   } else {
     await sendText(sock, jid, INVALID_INPUT_TEXT);

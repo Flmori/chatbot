@@ -1,6 +1,8 @@
 const { getState, resetState, updateState, touchState, isSessionExpired, clearExpiredStatus } = require('../state/sessionState');
 const { showMenuUtama, handleMenuUtama, MENU_UTAMA_TEXT, STANDBY_TEXT } = require('./menuUtama');
 const { handlePengajuanBaru } = require('./pengajuanBaru');
+const { handlePembaruanExpired } = require('./pembaruanExpired');
+const { handleResetPassphrase } = require('./resetPassphrase');
 const { startLiveAgen } = require('./liveAgen');
 const { sendText } = require('../utils/sender');
 const { checkRateLimit } = require('../utils/rateLimiter');
@@ -85,12 +87,11 @@ async function handleMessage(sock, msg) {
 
         case 'PEMBARUAN_ASK':
         case 'PEMBARUAN':
+          await handlePembaruanExpired(sock, jid, input, state);
+          break;
+
         case 'PASSPHRASE_GUIDE':
-          if (input === '4') {
-            await startLiveAgen(sock, jid);
-          } else {
-            await sendText(sock, jid, STANDBY_TEXT);
-          }
+          await handleResetPassphrase(sock, jid, input, state);
           break;
 
         case 'LIVE_AGEN':

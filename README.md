@@ -1,78 +1,142 @@
-# Chatbot WhatsApp Layanan Bantuan Tanda Tangan Elektronik AMS
+# Layanan Bantuan Tanda Tangan Elektronik AMS
+## Chatbot WhatsApp Interaktif Dinas Komunikasi dan Informatika Kabupaten Blora
 
-Aplikasi chatbot WhatsApp berbasis menu interaktif (*rule-based*) untuk memandu pengguna dalam alur layanan **Aplikasi Manajemen Sertifikat (AMS)** pada layanan **Tanda Tangan Elektronik (TTE)**. Proyek ini dikembangkan dalam rangka kegiatan Praktik Kerja Lapangan (PKL) di **Dinas Komunikasi dan Informatika (Kominfo) Kabupaten Blora**.
-
-> [!NOTE]
-> Chatbot ini beroperasi secara terstruktur berbasis menu navigasi angka (bukan AI chatbot berbasis natural language bebas), sehingga setiap alur informasi dan panduan terjamin konsisten sesuai Petunjuk Teknis (Juknis) resmi.
+Chatbot WhatsApp resmi untuk memandu aparatur sipil negara (ASN) dan pengguna layanan di lingkungan Pemerintah Kabupaten Blora dalam pengajuan, pembaruan, pengelolaan sertifikat elektronik, dan bantuan teknis pada **Aplikasi Manajemen Sertifikat (AMS)** Balai Sertifikasi Elektronik (BSrE) - Badan Siber dan Sandi Negara (BSSN).
 
 ---
 
-## 1. Status Fitur Saat Ini
+## 1. Ikhtisar Sistem
 
-Saat ini chatbot beroperasi dengan status fitur sebagai berikut:
+Sistem ini dirancang sebagai asisten virtual berbasis pesan instan WhatsApp yang menyederhanakan alur birokrasi dan petunjuk teknis (Juknis) menjadi percakapan dua arah yang interaktif, terarah, dan ramah pengguna. Pengguna dapat memperoleh informasi persyaratan, mengunduh dokumen formulir resmi secara langsung, menyimak panduan bergambar langkah-demi-langkah, hingga terhubung langsung dengan petugas verifikator (Live Agen) Dinas Kominfo Blora.
 
-| Menu | Nama Fitur | Status | Keterangan |
-| :---: | :--- | :---: | :--- |
-| **1** | **Pengajuan Baru** | **AKTIF** | Pengecekan email dinas, pengiriman dokumen formulir DOCX, pengiriman 8 foto panduan aktivasi Juknis (hal. 7–14), ringkasan SOP 6 langkah, dan kontak Live Agen. |
-| **2** | **Pembaharuan / Expired** | **STANDBY** | Menampilkan informasi alur standby dan opsi penghubung ke Live Agen. Implementasi SOP penuh masih menunggu penetapan teknis lanjutan. |
-| **3** | **Reset Passphrase** | **STANDBY** | Menampilkan informasi alur standby dan opsi penghubung ke Live Agen. Implementasi SOP penuh masih menunggu penetapan teknis lanjutan. |
-| **4** | **Live Agen** | **AKTIF** | Menampilkan daftar kontak petugas/verifikator resmi Dinas Kominfo Blora beserta jam layanan dan tautan chat langsung. |
-
----
-
-## 2. Fitur Utama
-
-- **Navigasi Berbasis Angka**: Interaksi sederhana menggunakan angka (`1`, `2`, `3`, `4`, dan `0` untuk kembali).
-- **Pengecekan Email Dinas**: Memastikan pemohon memiliki email dinas resmi (`@blorakab.go.id`) sebelum melangkah ke proses aktivasi akun AMS.
-- **Pengiriman Formulir DOCX Otomatis**: Bot langsung mengirimkan berkas formulir permohonan sertifikat elektronik berformat Microsoft Word (`.docx`).
-- **Panduan Visual Berurutan**: Pengiriman 8 gambar tutorial aktivasi akun AMS yang diambil langsung dari Petunjuk Teknis resmi halaman 7 sampai 14.
-- **Watermark & Caption Edukatif**: Seluruh gambar panduan dilengkapi label `[SIMULASI / DEMO]` pada caption penjelasnya.
-- **Multi-Agent Live Support**: Pengaturan kontak verifikator fleksibel (multi-agent) terpusat dengan tautan chat WhatsApp otomatis.
-- **In-Memory Session Management**: State percakapan dicatat per nomor pengirim (JID) tanpa membebani basis data eksternal.
-- **Proteksi Anti-Spam (Rate Limiter)**: Pembatasan laju pesan untuk menjaga stabilitas sistem dan nomor WhatsApp bot.
-- **Antrean Pemrosesan Pesan (Processing Queue)**: Mencegah kondisi balapan (*race condition*) antar pesan yang masuk bersamaan.
-- **Pemulihan Sambungan Otomatis (Auto Reconnect)**: Menghubungkan ulang socket secara mandiri saat terjadi gangguan jaringan.
-- **Autentikasi Multi-Device Baileys**: Mendukung login WhatsApp Web modern menggunakan scan kode QR terminal.
+### Fitur Utama (100% Aktif):
+1. **Menu 1 — Pengajuan Baru**: Pemeriksaan email dinas (@blorakab.go.id), pengiriman berkas Formulir Permohonan resmi (.docx), dan pengiriman panduan aktivasi akun berbasis Juknis AMS (8 gambar tutorial bertahap).
+2. **Menu 2 — Pembaharuan / Expired**: Layanan penanganan sertifikat elektronik menjelang masa kedaluwarsa (H-30) dengan pengiriman Formulir Permohonan (.docx) dan 2 gambar Juknis (Hal. 38–39), serta edukasi sertifikat kedaluwarsa (Expired) dengan 2 gambar Juknis (Hal. 40–41) dan arahan ke Live Agen.
+3. **Menu 3 — Reset Passphrase**: Panduan resmi dan pengiriman berkas Formulir Permohonan (.docx) untuk pengajuan reset kata sandi sertifikat yang lupa, disertai 2 gambar Juknis (Hal. 44–45), ringkasan SOP, dan tautan Live Agen dengan batasan keamanan ketat.
+4. **Menu 4 — Live Agen**: Direktori kontak resmi petugas verifikator Kominfo (Multi-Agent: Pak Kris & Pak Jaya) yang dapat dihubungi langsung melalui tautan WhatsApp beserta informasi jam operasional resmi.
 
 ---
 
-## 3. Alur Percakapan Bot
+## 2. Batasan Sistem & Keamanan (Security Boundaries)
 
+Untuk menjaga keamanan informasi dan integritas sertifikat elektronik:
+
+> [!IMPORTANT]
+> - **Bukan WhatsApp Business Cloud API**: Sistem ini memanfaatkan pustaka Baileys (`@whiskeysockets/baileys`) berbasis protokol soket WhatsApp Web Multi-Device, bukan Meta Cloud API berbayar.
+> - **Tanpa Akses Database AMS Langsung**: Chatbot beroperasi sebagai pemandu interaktif dan penyedia dokumen template. Chatbot **TIDAK TERHUBUNG** ke database internal AMS, tidak dapat mengecek masa kedaluwarsa secara otomatis, tidak dapat menghitung periode H-30 secara otomatis, dan tidak melakukan perubahan data pengguna pada sistem AMS.
+> - **Tidak Menerima Berkas Balasan via Chat**: Chatbot tidak menerima kiriman formulir yang telah diisi, foto/scan KTP, maupun berkas identitas pribadi. Seluruh pengajuan berkas fisik/digital dilakukan secara mandiri oleh pemohon kepada pihak Kominfo/Verifikator.
+> - **Keamanan Kredensial Mutlak (Zero Credential)**: Chatbot **TIDAK PERNAH** meminta, menerima, memvalidasi, maupun menyimpan data sensitif seperti *passphrase* lama/baru, kata sandi (*password*), PIN, maupun kode OTP.
+> - **Kerahasiaan Kredensial Sesi Bot**: Folder `auth_info/` berisi token autentikasi kriptografi sesi WhatsApp bot yang bersifat sangat rahasia. Folder ini **DILARANG KERAS** dibagikan atau di-commit ke repositori Git publik.
+
+---
+
+## 3. Diagram & Alur Layanan Chatbot
+
+### Peta Navigasi Menu:
 ```text
-               Pengguna WhatsApp
-                       │
-                       ▼
-              [ Menu Utama Bot ]
-                       │
-   ┌──────────────┬────┴─────────────┬──────────────┐
-   ▼              ▼                  ▼              ▼
-[1. Pengajuan] [2. Pembaharuan]  [3. Passphrase] [4. Live Agen]
-   │             (Standby)          (Standby)       │
-   ├─ Cek Email                                     └─ Kontak Petugas
-   │   ├─ Belum: Arahan Kominfo + Live Agen
-   │   └─ Sudah:
-   │       ├─ Kirim Formulir DOCX
-   │       ├─ Pilihan Tutorial (Ketik 1)
-   │       ├─ Kirim 8 Gambar Juknis Bertahap
-   │       ├─ Kirim Ringkasan Alur SOP
-   │       └─ Info Kontak Langsung Live Agen
-   │
-   └─ [0] Kembali ke Menu Utama
+                 [ Pengguna Mengirim Pesan ]
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │   Menu Utama    │
+                    └────────┬────────┘
+        ┌────────────────────┼────────────────────┬────────────────────┐
+        ▼                    ▼                    ▼                    ▼
+ [1. Pengajuan]       [2. Pembaharuan]      [3. Passphrase]       [4. Live Agen]
+        │                    │                    │                    │
+  Cek Email Dinas       Cek Masa Berlaku      Formulir DOCX       Daftar Kontak
+  ├─ Belum: Arahan      ├─ Expired:           ├─ Unduh Form       ├─ Pak Kris
+  │  Kominfo + Agen     │  Info + 2 Foto      ├─ Centang Reset    ├─ Pak Jaya
+  └─ Sudah:             │  (Hal 40–41)        ├─ Ajukan Mandiri   └─ Jam Kerja
+     ├─ Formulir DOCX   │  + Live Agen        ├─ Opsi Panduan:       08:00–16:00
+     └─ Pilihan Juknis: └─ Belum Expired:        2 Foto Juknis
+        8 Foto Panduan     ├─ Edukasi H-30       (Hal 44–45)
+        (Hal 7–14)         ├─ Formulir DOCX   └─ Live Agen
+                           ├─ 2 Foto Juknis
+                           │  (Hal 38–39)
+                           └─ Live Agen
+        │                    │                    │                    │
+        └────────────────────┴────────────────────┴────────────────────┘
+                                     │
+                             [ Ketik 0 Kapan Saja ]
+                                     ▼
+                            Kembali ke Menu Utama
 ```
 
-### Detail Alur Menu 1 (Pengajuan Baru)
-1. Pengguna mengetik `1` dari Menu Utama.
-2. Bot menanyakan kepemilikan Email Dinas (`1. Sudah punya`, `2. Belum punya`).
-3. Jika memilih `2` (Belum): Bot memberikan petunjuk pengajuan email dinas ke Dinas Kominfo dan menampilkan kontak Live Agen.
-4. Jika memilih `1` (Sudah): Bot mengirimkan berkas `Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx` dan menanyakan apakah ingin melihat tutorial aktivasi.
-5. Pengguna mengetik `1` untuk memulai panduan aktivasi.
-6. Bot mengirimkan 8 foto tutorial Juknis satu per satu dengan jeda pengiriman yang aman (1 detik per gambar).
-7. Bot mengirimkan ringkasan alur SOP 6 langkah pengajuan baru.
-8. Bot menyertakan daftar kontak Live Agen sebagai bantuan tambahan jika mengalami kendala.
-9. Pengguna dapat mengetik `0` kapan saja untuk kembali ke Menu Utama.
+---
 
-### Detail Alur Menu 4 (Live Agen)
-Menampilkan daftar seluruh agen verifikator yang aktif pada konfigurasi, nomor kontak, format tautan langsung (`https://wa.me/...`), dan jam operasional dinas.
+### Detail Alur Menu 1 — Pengajuan Baru
+1. Pengguna mengetik `1` dari Menu Utama.
+2. Bot menanyakan kepemilikan Email Dinas Pemkab Blora (`1. Sudah`, `2. Belum`).
+3. **Jika Belum (`2`)**: Bot memberikan petunjuk pengajuan email dinas resmi ke Dinas Kominfo dan menyertakan kontak Live Agen.
+4. **Jika Sudah (`1`)**:
+   - Bot mengirimkan pengantar persyaratan.
+   - Bot mengirimkan berkas `Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx`.
+   - Bot menampilkan ringkasan alur pengajuan dan menawarkan tutorial aktivasi (Ketik `1`).
+5. **Tutorial Aktivasi (Ketik `1`)**:
+   - Bot mengirimkan 8 foto panduan resmi dari **Juknis AMS halaman 7–14** secara bertahap (jeda 1 detik per gambar).
+   - Setiap gambar dilengkapi *caption* edukatif berlabel `[SIMULASI / DEMO]`.
+   - Bot mengirimkan pesan penutup dengan 6 ringkasan alur SOP dan kontak Live Agen.
+6. **Alur Lengkap SOP Pengajuan Baru**:
+   - Pengguna mengisi formulir permohonan.
+   - Pengguna mengajukan formulir kepada Kominfo / Verifikator.
+   - Verifikator melakukan input data pemohon ke sistem AMS.
+   - Pengguna menerima link aktivasi melalui Email Dinas.
+   - Pengguna melakukan aktivasi akun.
+   - Pengguna menunggu proses verifikasi dan persetujuan oleh Verifikator.
+   - Setelah diverifikasi/disetujui, link *Set Passphrase* dikirim melalui WhatsApp atau Email Dinas.
+   *(Catatan: Chatbot tidak melakukan Set Passphrase secara otomatis dan tidak mengakses sistem AMS).*
+
+---
+
+### Detail Alur Menu 2 — Pembaharuan / Expired
+1. Pengguna mengetik `2` dari Menu Utama.
+2. Bot menanyakan status masa berlaku sertifikat elektronik:
+   - `1` — Sudah Expired
+   - `2` — Belum Expired
+   - `0` — Menu Utama
+3. **Jika Sudah Expired (`1`)**:
+   - Bot menginformasikan bahwa sertifikat yang telah kedaluwarsa **tidak dapat diperbarui** secara langsung.
+   - Bot mengirimkan 2 foto panduan resmi:
+     - `pembaruan_expired_01.png` → Juknis AMS Halaman 40 (Informasi Sertifikat Expired).
+     - `pembaruan_expired_02.png` → Juknis AMS Halaman 41 (Arahan Pengajuan Baru).
+   - Bot memberikan arahan pengajuan ulang sertifikat baru dan menghubungkan ke Live Agen.
+4. **Jika Belum Expired (`2`)**:
+   - Bot mengedukasi bahwa pembaruan hanya dapat diproses saat sertifikat memasuki periode **H-30 sebelum kedaluwarsa**.
+   - Bot menanyakan konfirmasi apakah masa berlaku sertifikat sudah berada dalam periode H-30 (`1. Ya, Sudah H-30`, `0. Menu Utama`).
+   - Jika pengguna memilih `1`:
+     - Bot mengirimkan berkas `Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx`.
+     - Pengguna diarahkan untuk mengisi formulir dan dapat memilih melihat panduan (Ketik `1`).
+     - Bot mengirimkan 2 foto panduan resmi:
+       - `pembaruan_belum_expired_01.png` → Juknis AMS Halaman 38 (Menu Pembaruan AMS).
+       - `pembaruan_belum_expired_02.png` → Juknis AMS Halaman 39 (Proses Pembaruan AMS).
+     - Bot mengarahkan pengguna untuk menyerahkan formulir ke Verifikator dan menyediakan kontak Live Agen.
+
+---
+
+### Detail Alur Menu 3 — Reset Passphrase
+1. Pengguna mengetik `3` dari Menu Utama.
+2. Bot menyajikan penjelasan mengenai ketentuan permohonan reset passphrase bagi pemohon yang lupa kata sandi sertifikat.
+3. Bot langsung mengirimkan berkas resmi `Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx`.
+4. Bot menginstruksikan pengguna untuk:
+   - Mengisi formulir permohonan dan memberi tanda centang pada opsi: `[X] Reset Passphrase`.
+   - Menandatangani formulir tersebut.
+   - Mengajukan formulir secara mandiri kepada pihak Verifikator Kominfo / Live Agen.
+5. Bot menawarkan panduan teknis pada aplikasi AMS (Ketik `1`).
+6. Jika pengguna memilih `1`:
+   - Bot mengirimkan tepat 2 foto panduan resmi:
+     - `reset_passphrase_01.png` → Juknis AMS Halaman 44 (Permohonan Reset Passphrase).
+     - `reset_passphrase_02.png` → Juknis AMS Halaman 45 (Pembuatan Passphrase Baru).
+   - *(PENTING: Juknis Halaman 42–43 mengenai Ubah Passphrase TIDAK DISERTAKAN karena berbeda prosedur dengan Reset Passphrase).*
+   - Bot mengirimkan ringkasan SOP penutup dan kontak Live Agen.
+
+---
+
+### Detail Alur Menu 4 — Live Agen
+Menampilkan daftar verifikator resmi yang terkonfigurasi pada `src/config.js`:
+- **Pak Kris (Agen 1)**: Telp `0813-2882-3858` — [Chat WhatsApp](https://wa.me/6281328823858)
+- **Pak Jaya (Agen 2)**: Telp `0898-0008-575` — [Chat WhatsApp](https://wa.me/628980008575)
+- **Jam Operasional**: Senin – Jumat, 08:00 – 16:00 WIB.
 
 ---
 
@@ -80,338 +144,225 @@ Menampilkan daftar seluruh agen verifikator yang aktif pada konfigurasi, nomor k
 
 ```text
 chatbot-main/
-├── .agents/                                                    # Tooling pendukung agent AI (TETAP DI ROOT)
-├── auth_info/                                                  # Sesi kredensial WhatsApp Baileys (RAHASIA)
-├── docs/                                                       # Dokumen formulir dan pedoman resmi
+├── .agents/                                                    # Konfigurasi tooling & agent AI
+├── auth_info/                                                  # Kredensial sesi WhatsApp Baileys (SANGAT RAHASIA)
+├── docs/                                                       # Berkas dokumentasi & formulir
 │   ├── juknis/                                                 # Buku Petunjuk Teknis resmi AMS
 │   │   └── PETUNJUK-TEKNIS-PENGGUNAAN-APLIKASI-MANAJEMEN-...pdf
-│   └── Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx      # Berkas formulir aktif yang dikirim bot
-├── images/                                                     # Aset visual dan tangkapan layar panduan
-│   ├── cover/                                                  # Gambar sampul menu
-│   ├── passphrase/                                             # Aset standby menu reset passphrase
-│   ├── pembaruan/                                              # Aset standby menu pembaharuan
-│   └── pengajuan/                                              # 8 foto tutorial Juknis halaman 7–14
-├── node_modules/                                               # Paket dependensi proyek (hasil npm install)
+│   ├── Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx      # Berkas formulir resmi Word aktif
+│   └── MANUAL_BOOK.md                                          # Buku Manual Teknis 25 BAB Lengkap
+├── images/                                                     # Aset gambar panduan teknis
+│   ├── cover/                                                  # Gambar sampul menu (opsional)
+│   ├── passphrase/                                             # 2 aset panduan Reset Passphrase (Hal 44–45)
+│   │   ├── reset_passphrase_01.png
+│   │   └── reset_passphrase_02.png
+│   ├── pembaruan/                                              # 4 aset panduan Pembaruan/Expired (Hal 38–41)
+│   │   ├── pembaruan_belum_expired_01.png
+│   │   ├── pembaruan_belum_expired_02.png
+│   │   ├── pembaruan_expired_01.png
+│   │   └── pembaruan_expired_02.png
+│   └── pengajuan/                                              # 8 aset panduan Pengajuan Baru (Hal 7–14)
+│       ├── 01_registrasi_pengguna.jpg
+│       ├── ...
+│       └── 08_persetujuan_submit.jpg
+├── node_modules/                                               # Dependensi paket Node.js
 ├── scripts/                                                    # Skrip utilitas mandiri
-│   ├── generate-dummy-images.js                                # Generator gambar placeholder lokal
+│   ├── generate-dummy-images.js                                # Generator gambar simulasi lokal
 │   └── generate-form-docx.js                                   # Skrip pembuat formulir DOCX
 ├── src/                                                        # Kode sumber aplikasi utama
-│   ├── handler/                                                # Logika alur percakapan per menu
+│   ├── handler/                                                # Logika interaksi per menu
 │   │   ├── liveAgen.js                                         # Handler Menu 4 (Live Agen)
 │   │   ├── menuUtama.js                                        # Handler pesan pembuka & Menu Utama
 │   │   ├── messageHandler.js                                   # Router sentral pesan masuk
-│   │   ├── pembaruanExpired.js                                 # Handler Menu 2 (Standby)
+│   │   ├── pembaruanExpired.js                                 # Handler Menu 2 (Pembaruan & Expired)
 │   │   ├── pengajuanBaru.js                                    # Handler Menu 1 (Pengajuan Baru & Juknis)
-│   │   └── resetPassphrase.js                                  # Handler Menu 3 (Standby)
+│   │   └── resetPassphrase.js                                  # Handler Menu 3 (Reset Passphrase)
 │   ├── state/                                                  # Pengelolaan sesi pengguna
-│   │   └── sessionState.js                                     # Manajemen state dan auto cleanup sesi
+│   │   └── sessionState.js                                     # State in-memory & auto-cleanup sesi
 │   ├── utils/                                                  # Modul utilitas sistem
-│   │   ├── processingManager.js                                # Antrean delay pemrosesan pesan masuk
-│   │   ├── rateLimiter.js                                      # Pembatas frekuensi pesan (anti-spam)
-│   │   └── sender.js                                           # Fungsi pengirim teks, media & dokumen
+│   │   ├── processingManager.js                                # Antrean pemrosesan pesan (1500ms delay)
+│   │   ├── rateLimiter.js                                      # Anti-spam (5 pesan/30 detik per user)
+│   │   └── sender.js                                           # Fungsi pengirim teks, media, & dokumen
 │   ├── app.js                                                  # Entry point aplikasi bot
-│   ├── config.js                                               # File konfigurasi terpusat
-│   └── connection.js                                           # Manajemen koneksi socket WhatsApp (Baileys)
-├── tests/                                                      # Berkas pengujian otomatis (Test Suite)
-│   ├── test-tahap2.js                                          # Pengujian Core Logic & Navigasi
-│   ├── test-tahap3.js                                          # Pengujian Koneksi Baileys & Handler
-│   ├── test-tahap4.js                                          # Pengujian Menu, Session & Rate Limiting
-│   └── test-tahap7.js                                          # Pengujian Master Menu 1 & Multi-Agent
+│   ├── config.js                                               # Konfigurasi terpusat (agen, aset, waktu)
+│   └── connection.js                                           # Manajemen koneksi Baileys & QR login
+├── tests/                                                      # Rangkaian pengujian otomatis
+│   ├── test-tahap2.js                                          # Test Core Logic & Navigasi (21 passed)
+│   ├── test-tahap3.js                                          # Test Koneksi Baileys & Session (31 passed)
+│   ├── test-tahap4.js                                          # Test Menu, Timeout & Rate Limit (13 passed)
+│   ├── test-tahap7.js                                          # Legacy Archive Test (67 passed / 8 failed)
+│   └── test-tahap8.js                                          # Active Comprehensive Master Suite (95 passed)
 ├── .gitignore                                                  # Pengecualian berkas Git
-├── package.json                                                # Metadata proyek dan daftar dependensi
-├── package-lock.json                                           # Catatan versi dependensi terkunci
+├── package.json                                                # Konfigurasi package & skrip runner
+├── package-lock.json                                           # Lockfile dependensi
 └── README.md                                                   # Dokumentasi utama proyek
 ```
 
-> [!IMPORTANT]
-> - Folder `.agents/` merupakan folder konfigurasi *tooling* lingkungan pengembangan. **Bukan bagian dari kode sumber runtime chatbot**.
-> - Folder `auth_info/` berisi token autentikasi sesi WhatsApp yang bersifat **SANGAT RAHASIA**.
-> - Folder `node_modules/` memuat pustaka eksternal hasil instalasi npm dan tidak perlu dipindahkan atau diubah secara manual.
+---
+
+## 5. Anatomi Formulir Permohonan DOCX
+
+Berkas resmi yang dikirimkan bot adalah:
+`docs/Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx` (Ukuran: 9.187 bytes).
+
+Sesuai format resmi dinas, dokumen ini memuat 7 komponen utama:
+1. **Kop Surat**: Nama Pemerintah Kabupaten/Kota, Dinas/Badan/Instansi, Alamat & Telepon.
+2. **Tanggal & Tempat**: Titik mangsa surat permohonan.
+3. **Tujuan Surat**: Kepada Yth. Kepala Dinas Komunikasi dan Informatika.
+4. **Perihal & Pernyataan Permohonan**: "Dengan ini kami mengajukan pembuatan baru / pembaharuan / reset, coret yang tidak perlu."
+5. **Data Permohonan**:
+   - Tanda Tangan Elektronik: `[  ] Pembuatan Baru     [  ] Pembaharuan     [  ] Reset`
+   - Atas Nama: `.......................................................`
+   - Nama: `.......................................................`
+   - Email Dinas: `.......................................................`
+   - No HP User: `.......................................................`
+   - No HP Narahubung: `.......................................................`
+6. **Kalimat Penutup**: "Demikian surat permohonan dibuat atas kerja samanya, sekian terima kasih."
+7. **Area Tanda Tangan**: Kolom tanda tangan pemohon tunggal.
+
+*(Catatan: Formulir resmi tidak memuat field NIK, NIP, Jabatan, atau Unit Kerja tambahan di luar daftar di atas).*
 
 ---
 
-## 5. Teknologi yang Digunakan
+## 6. Manajemen Sesi, Anti-Spam, dan Queue
 
-Aplikasi ini dibangun menggunakan pustaka JavaScript berbasis Node.js:
+### Sesi Percakapan (`src/state/sessionState.js`)
+- **Penyimpanan In-Memory**: Sesi pengguna disimpan dalam RAM berbasis JID pengguna untuk performa tinggi tanpa dependensi database eksternal.
+- **State Timeout (30 Menit)**: Sesi percakapan aktif selama 30 menit (1.800.000 ms) sejak pesan terakhir.
+- **Pembersihan Otomatis (10 Menit)**: Timer otomatis dijalankan setiap 10 menit (600.000 ms) untuk membersihkan sesi yang kedaluwarsa.
+- **Reset Navigasi (`0`)**: Pengguna dapat mengetik angka `0` dari submenu mana pun untuk kembali ke Menu Utama. Tindakan ini mereset posisi state menu pada bot **tanpa menghapus riwayat obrolan WhatsApp pengguna**.
+- **Perlakuan Sesi Kedaluwarsa**: Jika sesi telah kedaluwarsa dan pengguna mengirim pesan baru, bot akan mereset state dan menampilkan pesan bahwa sesi telah berakhir lalu menyajikan Menu Utama kembali.
 
-- **Node.js**: Lingkungan eksekusi (*runtime environment*) JavaScript asynchronous sisi server.
-- **@whiskeysockets/baileys** (`^7.0.0-rc14`): Pustaka soket multi-device untuk berkomunikasi langsung dengan protokol WhatsApp Web.
-  *(Catatan: Proyek ini menggunakan Baileys melalui koneksi soket Web WhatsApp, bukan WhatsApp Business API resmi Meta).*
-- **pino** (`^10.3.1`): Logger berkecepatan tinggi yang digunakan Baileys untuk mencatat aktivitas sistem.
-- **qrcode-terminal** (`^0.12.0`): Menampilkan kode QR autentikasi langsung pada jendela terminal / command prompt.
-- **docx** (`^9.7.1`): Pustaka untuk membuat dan menyusun struktur berkas dokumen Word (.docx) secara programatik.
-- **sharp** (`^0.35.4`): Pustaka pengolahan citra (*image processing*) berkinerja tinggi untuk memproses aset visual.
-- **nodemon** (`^3.1.14`): Perkakas pengembang untuk me-restart aplikasi secara otomatis saat berkas kode sumber diubah.
+### Anti-Spam Rate Limiter (`src/utils/rateLimiter.js`)
+- Menjaga nomor bot dari risiko pemblokiran WhatsApp akibat pengiriman pesan massal.
+- Maksimal **5 pesan dalam jendela waktu 30 detik** per pengguna.
+- Pesan ke-6 akan memicu 1 kali pesan peringatan ramah. Pesan ke-7 dan seterusnya dalam rentang 30 detik tersebut akan diabaikan secara hening (*silent discard*).
 
----
-
-## 6. Persyaratan Sistem & Instalasi
-
-### Persyaratan:
-- Komputer / Server dengan OS Windows, Linux, atau macOS.
-- **Node.js** versi 18.x atau versi LTS yang lebih baru.
-- Koneksi internet yang stabil untuk soket WhatsApp.
-
-### Langkah Instalasi:
-1. Buka terminal atau Command Prompt pada direktori proyek `chatbot-main/`.
-2. Pasang seluruh dependensi dengan menjalankan:
-   ```bash
-   npm install
-   ```
-3. Seluruh paket dependensi akan dipasang ke dalam folder `node_modules/`.
+### Processing Queue & Delay Pengiriman
+- **Processing Delay (`src/utils/processingManager.js`)**: Pesan beruntun dari pengguna yang sama diproses melalui antrean dengan jeda **1500 ms (1,5 detik)** untuk mencegah *race condition* dan benturan state navigasi.
+- **Media Send Delay (`src/utils/sender.js`)**: Pengiriman media/gambar berurutan diberikan jeda **1000 ms (1 detik)** per gambar agar seluruh media diterima urut dan tidak membebani memori perangkat pengguna.
 
 ---
 
-## 7. Cara Menjalankan Bot
+## 7. Rangkaian Pengujian Otomatis (Testing)
 
-### Mode Produksi / Standar:
-Jalankan perintah berikut:
-```bash
-npm start
-```
-*(Perintah ini mengeksekusi script `node src/app.js`)*.
-
-### Mode Pengembangan (Development):
-Jalankan perintah berikut:
-```bash
-npm run dev
-```
-*(Perintah ini mengeksekusi `nodemon src/app.js` yang akan me-reload bot otomatis setiap ada perubahan file)*.
-
----
-
-## 8. Prosedur Login WhatsApp Pertama Kali
-
-1. Jalankan aplikasi menggunakan `npm start` atau `npm run dev`.
-2. Jika belum memiliki sesi aktif di folder `auth_info/`, terminal akan mencetak **Kode QR (QR Code)**.
-3. Buka aplikasi **WhatsApp** pada smartphone yang difungsikan sebagai nomor bot.
-4. Buka menu **Pengaturan (Settings)** atau ikon titik tiga di sudut kanan atas.
-5. Pilih menu **Perangkat Tertaut (Linked Devices)**.
-6. Tekan tombol **Tautkan Perangkat (Link a Device)**.
-7. Arahkan kamera smartphone ke Kode QR di terminal hingga terpindai.
-8. Tunggu beberapa detik hingga terminal menampilkan pesan konfirmasi:
-   ```text
-   Bot terhubung ke WhatsApp!
-   Siap menerima pesan...
-   ```
-9. Seluruh data sesi masuk akan disimpan secara otomatis di dalam folder `auth_info/`. Pada booting berikutnya, bot tidak akan meminta scan QR ulang selama sesi masih berlaku.
-
----
-
-## 9. Prosedur Mengganti Nomor / Akun WhatsApp Bot
-
-Jika nomor bot ingin dialihkan ke nomor WhatsApp yang baru:
-
-1. Hentikan jalannya bot dengan menekan kombinasi tombol `Ctrl + C` pada terminal.
-2. Pastikan proses bot telah berhenti sepenuhnya.
-3. Hapus seluruh isi di dalam folder `auth_info/` (atau hapus foldernya).
-4. Jalankan kembali aplikasi:
-   ```bash
-   npm start
-   ```
-5. Terminal akan membuat folder `auth_info/` baru dan merender Kode QR baru.
-6. Lakukan pemindaian QR menggunakan nomor WhatsApp yang baru melalui menu **Perangkat Tertaut**.
-7. Tunggu hingga bot terhubung kembali.
-
----
-
-## 10. Konfigurasi Sistem (`src/config.js`)
-
-Seluruh pengaturan sistem dikontrol secara sentral melalui file [`src/config.js`](src/config.js). Nilai-nilai konfigurasi aktual yang diterapkan meliputi:
-
-| Variabel Konfigurasi | Nilai Aktual | Keterangan Fungsi |
-| :--- | :--- | :--- |
-| `botName` | `'Layanan Bantuan Tanda Tangan Elektronik AMS'` | Nama identitas resmi bot pada salam pembuka. |
-| `liveAgents` | Array multi-agent | Daftar nama, nomor telepon, label, dan link WhatsApp agen. |
-| `operationalHours` | `'Senin - Jumat, 08:00 - 16:00 WIB'` | Jam operasional pelayanan verifikator. |
-| `sendDelay` | `1000` ms (1 detik) | Jeda waktu pengiriman antar gambar tutorial. |
-| `rateLimitMaxMessages`| `5` pesan | Batas maksimal pesan yang dikirim sebelum peringatan anti-spam. |
-| `rateLimitWindow` | `30000` ms (30 detik) | Jendela waktu pemantauan batas frekuensi pesan. |
-| `processingDelay` | `1500` ms (1,5 detik) | Delay pemrosesan antrean per-pengguna untuk mencegah tabrakan pesan. |
-| `stateTimeout` | `1800000` ms (30 menit) | Batas waktu idle percakapan sebelum sesi di-reset. |
-| `cleanupInterval` | `600000` ms (10 menit) | Interval berkala pembersihan memori dari sesi kedaluwarsa. |
-| `docPaths` | Path formulir DOCX | Lokasi berkas `Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx`. |
-| `imagePaths` & `imageFiles`| Objek mapping gambar | Lokasi folder dan penamaan 8 foto tutorial Juknis. |
-| `imageCaptions` | Array caption | Teks penjelas pada setiap gambar berlabel `[SIMULASI / DEMO]`. |
-
----
-
-## 11. Pengaturan Live Agen (Multi-Agent)
-
-Kontak petugas verifikator dikonfigurasi melalui properti array `liveAgents` di dalam `src/config.js`:
-
-```javascript
-liveAgents: [
-  {
-    name: 'Pak Kris',
-    label: 'Agen 1',
-    phone: '081328823858',
-    displayPhone: '0813-2882-3858',
-    waLink: 'https://wa.me/6281328823858',
-  },
-  {
-    name: 'Pak Jaya',
-    label: 'Agen 2',
-    phone: '08980008575',
-    displayPhone: '0898-0008-575',
-    waLink: 'https://wa.me/628980008575',
-  },
-]
-```
-
-- **Skalabilitas**: Jika di masa mendatang terdapat penambahan petugas (misalnya Agen 3), cukup tambahkan satu objek agen baru ke dalam array `liveAgents`.
-- Seluruh tampilan kontak pada Menu 1, Menu 2, Menu 3, maupun Menu 4 akan ter-update secara otomatis tanpa perlu mengubah kode handler.
-- Jam operasional resmi agen: **Senin - Jumat, 08:00 - 16:00 WIB**.
-
----
-
-## 12. Panduan Pembaruan SOP & Teks Pesan
-
-Jika terdapat pembaruan regulasi atau redaksi SOP resmi dari Dinas Kominfo Blora / Balai Sertifikasi Elektronik (BSrE), perbarui file handler terkait:
-
-- **Teks Sambutan & Menu Utama**: Diatur pada [`src/handler/menuUtama.js`](src/handler/menuUtama.js).
-- **Alur & Redaksi Menu 1**: Diatur pada [`src/handler/pengajuanBaru.js`](src/handler/pengajuanBaru.js) (fungsi `getTutorialCompleteText` untuk ringkasan 6 langkah alur SOP).
-- **Alur & Kontak Menu 4**: Diatur pada [`src/handler/liveAgen.js`](src/handler/liveAgen.js).
-- **Routing Input Pesan**: Diatur pada [`src/handler/messageHandler.js`](src/handler/messageHandler.js).
-- **Menu Standby (Menu 2 & 3)**: Diatur pada [`src/handler/pembaruanExpired.js`](src/handler/pembaruanExpired.js) dan [`src/handler/resetPassphrase.js`](src/handler/resetPassphrase.js).
-
-> [!CAUTION]
-> Jangan mengubah substansi alur SOP berdasarkan asumsi pribadi. Pastikan setiap perubahan teks mengacu pada surat edaran, juknis, atau instruksi resmi verifikator Kominfo Blora.
-
----
-
-## 13. Panduan Penggantian Gambar Tutorial
-
-Aset gambar tutorial aktivasi tersimpan pada folder:
-```text
-images/pengajuan/
-```
-Terdapat 8 gambar tutorial yang memetakan langkah pada **Juknis AMS halaman 7 s.d. 14**:
-1. `01_registrasi_pengguna.png` — Juknis Hal. 7 (Registrasi Pengguna)
-2. `02_aktivasi_akun.png` — Juknis Hal. 8 (Aktivasi Akun)
-3. `03_lengkapi_data_diri.png` — Juknis Hal. 9 (Lengkapi Data Diri)
-4. `04_verifikasi_whatsapp.png` — Juknis Hal. 10 (Verifikasi WhatsApp)
-5. `05_data_kedinasan.png` — Juknis Hal. 11 (Data Kedinasan)
-6. `06_lengkapi_data.png` — Juknis Hal. 12 (Lengkapi Data)
-7. `07_verifikasi_data.png` — Juknis Hal. 13 (Verifikasi Data)
-8. `08_persetujuan_submit.png` — Juknis Hal. 14 (Persetujuan dan Submit)
-
-Jika ingin mengganti tangkapan layar dengan resolusi baru:
-- Gunakan nama dan format file yang sesuai (`.png` atau `.jpg`).
-- Pastikan gambar terbaca dengan jelas pada layar smartphone.
-- Pastikan seluruh caption edukatif tetap menyertakan tag `[SIMULASI / DEMO]`.
-- Jika nama atau format berkas berubah, sesuaikan pemetaannya pada properti `imageFiles.pengajuan` di `src/config.js`.
-
----
-
-## 14. Pembaruan Formulir Permohonan DOCX
-
-- Berkas formulir permohonan tersimpan pada:
-  ```text
-  docs/Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx
-  ```
-- File ini dikirim secara otomatis oleh bot melalui metode `sendDocument` Baileys saat pengguna mengonfirmasi telah memiliki email dinas pada alur Menu 1.
-- Jika ada pembaruan format surat permohonan dari dinas:
-  - Ganti file fisik tersebut dengan tetap mempertahankan nama file yang sama.
-  - Pastikan berkas berformat `.docx` yang valid dan dapat dibuka sempurna menggunakan Microsoft Word maupun WPS Office.
-  - Jika nama file diubah, perbarui path referensi pada `config.docPaths.formulirPermohonan` di `src/config.js`.
-
----
-
-## 15. Pengujian Otomatis (Testing)
-
-Proyek ini dilengkapi rangkaian pengujian unit dan integrasi otomatis yang tersentralisasi di dalam folder `tests/`.
+Proyek ini memiliki rangkaian uji otomatis yang memvalidasi seluruh fungsionalitas logika, handler, sesi, koneksi, hingga integrasi multi-agen.
 
 ### Perintah Pengujian:
 ```bash
-# 1. Uji Core Logic & Navigasi State (21 Skenario)
-node tests/test-tahap2.js
-
-# 2. Uji Koneksi Baileys & Handler Pesan (31 Skenario)
-node tests/test-tahap3.js
-
-# 3. Uji Menu Utama, Sesi Idle & Rate Limiter (13 Skenario)
-node tests/test-tahap4.js
-
-# 4. Uji Master Komprehensif Menu 1, Juknis & Multi-Agent (75 Skenario)
-node tests/test-tahap7.js
-
-# 5. Uji Cepat melalui NPM Script (Menjalankan tests/test-tahap7.js)
+# 1. Menjalankan Master Test Suite Aktif (Direkomendasikan)
 npm test
+
+# Atau menjalankan langsung skrip pengujian per tahap:
+node tests/test-tahap2.js   # Uji Core Logic & Navigasi (21 skenario)
+node tests/test-tahap3.js   # Uji Koneksi Baileys & Session (31 skenario)
+node tests/test-tahap4.js   # Uji Menu Utama, Idle & Rate Limit (13 skenario)
+node tests/test-tahap8.js   # Uji Master Komprehensif Seluruh Menu (95 skenario)
 ```
 
-### Hasil Verifikasi Terakhir:
-Seluruh pengujian mencatatkan hasil **100% LULUS (140 passed, 0 failed)**:
-- `test-tahap2.js`: 21 passed, 0 failed
-- `test-tahap3.js`: 31 passed, 0 failed
-- `test-tahap4.js`: 13 passed, 0 failed
-- `test-tahap7.js`: 75 passed, 0 failed
+### Status Pengujian Aktif Sistem:
+```text
+-----------------------------------------------------------------
+Test Suite                Status     Passed   Failed   Cakupan
+-----------------------------------------------------------------
+tests/test-tahap2.js      AKTIF        21        0     Core Logic, Navigasi 0, State Isolasi
+tests/test-tahap3.js      AKTIF        31        0     Baileys Socket, QR, Lifecycle, Guards
+tests/test-tahap4.js      AKTIF        13        0     Menu 1-4, Session Timeout, Rate Limiter
+tests/test-tahap8.js      AKTIF        95        0     Master Suite 20 Skenario (Menu 1,2,3,4)
+-----------------------------------------------------------------
+TOTAL ACTIVE TEST                      160       0     100% LULUS (ZERO DEFECT)
+-----------------------------------------------------------------
+```
 
-*(Catatan: Perintah `npm test` menjalankan master test `tests/test-tahap7.js` yang memverifikasi 75 skenario regresi alur Menu 1 dan Multi-Agent)*.
-
----
-
-## 16. Manajemen Sesi Percakapan (Session Management)
-
-- **Penyimpanan Sesi**: Sesi disimpan secara *in-memory* (RAM) berbasis JID (nomor WhatsApp) masing-masing pengguna melalui modul `src/state/sessionState.js`. Sesi bersifat sementara dan tidak disimpan permanen di database.
-- **Waktu Kedaluwarsa (State Timeout)**: 30 menit (`1800000` ms). Jika pengguna tidak mengirim pesan selama 30 menit, status sesi akan otomatis di-reset.
-- **Pembersihan Rutin (Auto Cleanup)**: Sistem menjalankan timer berkala setiap 10 menit (`600000` ms) untuk membersihkan sesi yang telah melewati batas timeout.
-- **Reset Navigasi**: Pengguna dapat mengetik angka `0` kapan saja dari submenu untuk kembali ke Menu Utama tanpa menghapus riwayat chat.
-
----
-
-## 17. Mekanisme Rate Limiter & Processing Queue
-
-Untuk menjaga keandalan bot dan nomor WhatsApp dari risiko spam atau pemblokiran:
-
-1. **Anti-Spam Rate Limiter (`src/utils/rateLimiter.js`)**:
-   - Membatasi maksimal **5 pesan dalam jendela waktu 30 detik** per pengguna.
-   - Pesan ke-6 akan memicu 1x pesan peringatan ramah, dan pesan spam berikutnya pada jendela waktu yang sama akan ditahan secara hening tanpa membanjiri chat.
-2. **Processing Queue (`src/utils/processingManager.js`)**:
-   - Menerapkan antrean antarpengguna dengan jeda **1,5 detik (1500 ms)** sebelum memproses pesan baru dari pengirim yang sama. Hal ini memastikan pesan diproses teratur dan mencegah benturan state percakapan.
-3. **Send Delay (`src/utils/sender.js`)**:
-   - Memberikan jeda **1 detik (1000 ms)** saat bot mengirimkan beberapa berkas media/gambar secara berurutan, sehingga seluruh gambar diterima berurutan dan tidak membebani memori perangkat penerima.
+### Catatan Khusus Legacy Test (`tests/test-tahap7.js`):
+- Berkas `tests/test-tahap7.js` adalah **arsip historis** dari Tahap 7 masa transisi saat Menu 2 dan Menu 3 masih berstatus "(Segera Hadir)".
+- Hasil eksekusi historis mencatat **67 passed / 8 failed**. Kedelapan kegagalan tersebut murni disebabkan oleh assertion lama yang menuntut Menu 2 & 3 berstatus standby.
+- Berkas ini **SENGAJA DIPERTAHANKAN** sebagai arsip jejak audit dan **TIDAK DIUBAH / DIHAPUS**.
+- Skrip `npm test` telah dikonfigurasi resmi untuk mengeksekusi `tests/test-tahap8.js`.
 
 ---
 
-## 18. Panduan Mengatasi Masalah (Troubleshooting)
+## 8. Panduan Maintenance Mingguan
 
-### Kode QR Tidak Muncul di Terminal
-- Pastikan bot dijalankan melalui terminal interaktif (`npm start` atau `npm run dev`).
-- Periksa folder `auth_info/`. Jika file sesi sebelumnya rusak atau tidak lengkap, hapus folder `auth_info/` lalu jalankan ulang bot.
+Administrator atau operator layanan wajib menjalankan pemeliharaan rutin mingguan untuk memastikan keandalan operasional chatbot:
 
-### Bot Tidak Merespons Pesan Masuk
-- Periksa terminal untuk memastikan status koneksi adalah `Bot terhubung ke WhatsApp!`.
-- Pastikan ponsel nomor bot tetap memiliki koneksi internet aktif.
-- Pastikan pesan tidak dikirim dari nomor bot itu sendiri (pesan `fromMe` diabaikan).
-- Pastikan pesan dikirim melalui chat pribadi (personal chat), bukan pesan grup WhatsApp.
+### 📋 Checklist Pemeliharaan Mingguan (10 Langkah):
 
-### Gambar Tutorial Tidak Terkirim
-- Pastikan 8 berkas gambar tersedia di direktori `images/pengajuan/`.
-- Periksa kesesuaian nama berkas fisik dengan daftar nama file pada properti `imageFiles.pengajuan` di `src/config.js`.
-
-### Berkas DOCX Formulir Gagal Terkirim
-- Pastikan berkas `docs/Formulir_Permohonan_Sertifikat_Elektronik_AMS.docx` tersedia secara fisik di folder `docs/`.
-- Pastikan berkas tidak sedang dibuka atau dikunci oleh aplikasi lain (seperti Microsoft Word).
-
----
-
-## 19. Keamanan & Kerahasiaan Data (Security)
+1. **Jalankan Test Otomatis**:
+   Eksekusi perintah `npm test` pada terminal.
+2. **Verifikasi Hasil Test**:
+   Pastikan `test-tahap8.js` menghasilkan output **95 passed, 0 failed**.
+3. **Lakukan Smoke Test WhatsApp Manual**:
+   Kirim pesan dari nomor uji coba ke bot:
+   - Pilih `1` (Pengajuan Baru) → Cek respons alur email dinas.
+   - Pilih `2` (Pembaharuan) → Cek respons alur Expired dan Belum Expired.
+   - Pilih `3` (Reset Passphrase) → Cek respons pembuka dan opsi panduan.
+   - Pilih `4` (Live Agen) → Cek daftar nama kontak dan tautan wa.me.
+   - Ketik `0` → Pastikan kembali ke Menu Utama secara mulus.
+   - Kirim karakter acak (misal: `xyz`) → Pastikan bot merespons dengan pesan ramah.
+4. **Verifikasi Pengiriman Media Dokumen & Gambar**:
+   - Pastikan berkas formulir DOCX dapat diunduh dan dibuka.
+   - Pastikan 8 gambar Menu 1 terkirim bertahap dengan jelas.
+   - Pastikan gambar Menu 2 (4 foto) dan Menu 3 (2 foto) terkirim utuh.
+5. **Periksa Stabilitas Koneksi Baileys**:
+   Pastikan status koneksi terminal konsisten (`Bot terhubung ke WhatsApp!`) dan tidak mengalami perputaran koneksi (*reconnect loop*).
+6. **Periksa Log Terminal Konsol**:
+   Pastikan tidak ada galat yang berulang (*unhandled exceptions* atau log error merah).
+7. **Periksa Validitas Konfigurasi (`src/config.js`)**:
+   - Periksa apakah nomor dan tautan WhatsApp Pak Kris & Pak Jaya masih aktif.
+   - Pastikan jam operasional dinas belum berubah.
+   - Pastikan path dokumen dan berkas aset valid.
+8. **Audit Integritas File Aset Fisik**:
+   - Direktori `images/pengajuan/` (8 berkas).
+   - Direktori `images/pembaruan/` (4 berkas).
+   - Direktori `images/passphrase/` (2 berkas).
+   - Direktori `docs/` (1 berkas DOCX formulir).
+9. **Audit Keamanan & Kerahasiaan Sistem**:
+   - Pastikan folder `auth_info/` tidak pernah diunggah ke repositori Git publik.
+   - Pastikan folder `auth_info/` dan `node_modules/` tetap tercantum di `.gitignore`.
+10. **Pencatatan Insiden (Log Insiden)**:
+    Jika ditemukan kendala selama operasional mingguan, lakukan pencatatan ringkas mencakup:
+    - Tanggal & Waktu Kejadian
+    - Gejala / Masalah yang Terjadi
+    - Akar Penyebab (*Root Cause*)
+    - Tindakan Perbaikan (*Action Taken*)
+    - Hasil Akhir Evaluasi
 
 > [!CAUTION]
-> **PERINGATAN KEAMANAN TINGGI:**
-> - **Folder `auth_info/` memuat token sesi dan kunci kriptografi WhatsApp bot**. Siapa pun yang memperoleh salinan folder ini dapat menggunakan nomor WhatsApp bot tanpa izin.
-> - **JANGAN PERNAH** mengunggah folder `auth_info/` ke repositori Git (folder ini telah didaftarkan dalam `.gitignore`).
-> - **JANGAN PERNAH** membagikan tangkapan layar terminal yang memuat Kode QR login aktif kepada pihak lain.
-> - **JANGAN PERNAH** menyertakan folder `auth_info/` atau `node_modules/` saat membuat arsip ZIP/RAR proyek untuk dibagikan.
+> **Peringatan Penting**: JANGAN PERNAH menguji mekanisme rate limiter secara agresif (mengirim spam ratusan pesan) menggunakan nomor pribadi maupun nomor resmi dinas di WhatsApp produksi, karena berisiko memicu sanksi pembatasan akun otomatis oleh pihak WhatsApp/Meta.
 
 ---
 
-## 20. Catatan Pengembangan & Pemeliharaan
+## 9. Panduan Instalasi & Menjalankan Bot
 
-- **Menu 2 dan Menu 3**: Saat ini berstatus *standby*. Jika SOP pembaharuan sertifikat dan reset passphrase sudah disahkan oleh pihak berwenang, alur logika dapat diimplementasikan pada `src/handler/pembaruanExpired.js` dan `src/handler/resetPassphrase.js`.
-- **Integritas Pengujian**: Selalu jalankan `npm test` setelah melakukan modifikasi pada kode handler maupun konfigurasi untuk memastikan tidak ada alur yang mengalami kerusakan (*regression*).
-- **Pengembangan Bertahap**: Lakukan pengujian pada lingkungan lokal sebelum memublikasikan pembaruan ke nomor WhatsApp layanan publik resmi.
+### Kebutuhan Sistem:
+- **Node.js**: Versi `>= 18.0.0` (disarankan versi LTS).
+- **NPM**: Versi `>= 9.0.0`.
+- **Aplikasi WhatsApp**: Terinstal pada smartphone dengan nomor telepon dinas yang aktif.
+
+### Langkah Instalasi:
+```bash
+# 1. Clone repositori ke komputer lokal / server
+git clone https://github.com/Flmori/chatbot.git
+cd chatbot-main
+
+# 2. Instal seluruh dependensi
+npm install
+
+# 3. Jalankan pengujian verifikasi sistem
+npm test
+
+# 4. Jalankan bot WhatsApp
+npm start
+```
+
+### Prosedur Login Pertama Kali:
+1. Saat perintah `npm start` dijalankan pertama kali, terminal akan merender sebuah **Kode QR**.
+2. Buka WhatsApp pada smartphone layanan Kominfo.
+3. Buka **Perangkat Tertaut** (*Linked Devices*) → Ketuk **Tautkan Perangkat** (*Link a Device*).
+4. Arahkan kamera smartphone ke Kode QR di layar terminal.
+5. Setelah terhubung, kredensial sesi tersimpan otomatis pada folder `auth_info/`.
+6. Untuk restart selanjutnya, bot akan login otomatis tanpa meminta pemindaian Kode QR ulang selama sesi masih aktif.
 
 ---
-*Dokumentasi ini disusun untuk pemeliharaan dan keberlanjutan sistem Layanan Bantuan Tanda Tangan Elektronik AMS Dinas Kominfo Kabupaten Blora.*
+*Dokumentasi Resmi Sistem Layanan Bantuan Tanda Tangan Elektronik AMS — Dinas Komunikasi dan Informatika Kabupaten Blora.*

@@ -17,7 +17,7 @@ const { startLiveAgen, getLiveAgenText } = require('./liveAgen');
 //        input AMS → terima link di email dinas → aktivasi akun → buat passphrase)
 //      - Opsi melihat Panduan Aktivasi AMS (Juknis)
 //   3. Panduan Aktivasi AMS:
-//      - Kirim 5 gambar langkah dengan penanda [SIMULASI / DEMO]
+//      - Kirim gambar langkah panduan aktivasi Juknis
 //      - Penutup ringkasan SOP + opsi Live Agen (4) & Menu Utama (0)
 // ============================================================
 
@@ -162,10 +162,9 @@ function getPengajuanCaptions(images = []) {
   const list = images.length > 0 ? images : getPengajuanImagePaths();
   return list.map((imgPath, i) => {
     if (captions[i]) {
-      const cap = captions[i];
-      return cap.includes('[SIMULASI / DEMO]') ? cap : `[SIMULASI / DEMO] ${cap}`;
+      return captions[i];
     }
-    return `[SIMULASI / DEMO] Langkah ${i + 1}`;
+    return `Langkah ${i + 1}`;
   });
 }
 

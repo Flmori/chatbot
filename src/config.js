@@ -54,7 +54,7 @@ module.exports = {
   // ============================================================
   imageFiles: {
     cover: ['00_panduan_ams.jpg'],
-            pengajuan: [
+    pengajuan: [
       '01_registrasi_pengguna.jpg',
       '02_aktivasi_akun.jpg',
       '03_lengkapi_data_diri.jpg',
@@ -65,50 +65,42 @@ module.exports = {
       '08_persetujuan_submit.jpg',
     ],
     pembaruan: [
-      '01_daftar_sertifikat.jpg',
-      '02_permohonan_pembaruan.jpg',
-      '03_konfirmasi_pembaruan.jpg',
-      '04_set_passphrase.jpg',
-      '05_pembaruan_selesai.jpg',
+      'pembaruan_belum_expired_01.png',
+      'pembaruan_belum_expired_02.png',
+      'pembaruan_expired_01.png',
+      'pembaruan_expired_02.png',
     ],
     passphrase: [
-      '01_daftar_sertifikat.jpg',
-      '02_pilih_reset_passphrase.jpg',
-      '03_link_reset_email.jpg',
-      '04_pengecekan_foto.jpg',
-      '05_buat_passphrase.jpg',
+      'reset_passphrase_01.png',
+      'reset_passphrase_02.png',
     ],
   },
 
   // ============================================================
-  // Caption untuk gambar tutorial aktivasi Juknis (Menu 1)
-  // Setiap gambar ditandai [SIMULASI / DEMO] dengan penjelasan singkat
+  // Caption untuk gambar tutorial aktivasi Juknis (Menu 1, 2, 3)
+  // Setiap gambar dilengkapi penjelasan singkat
   // mengacu pada urutan langkah Juknis AMS.
   // ============================================================
   imageCaptions: {
     pengajuan: [
-      '[SIMULASI / DEMO] Langkah 1 — Registrasi Pengguna',
-      '[SIMULASI / DEMO] Langkah 2 — Aktivasi Akun',
-      '[SIMULASI / DEMO] Langkah 3 — Lengkapi Data Diri',
-      '[SIMULASI / DEMO] Langkah 4 — Verifikasi WhatsApp',
-      '[SIMULASI / DEMO] Langkah 5 — Data Kedinasan',
-      '[SIMULASI / DEMO] Langkah 6 — Lengkapi Data',
-      '[SIMULASI / DEMO] Langkah 7 — Verifikasi Data',
-      '[SIMULASI / DEMO] Langkah 8 — Persetujuan dan Submit',
+      'Langkah 1 — Registrasi Pengguna',
+      'Langkah 2 — Aktivasi Akun',
+      'Langkah 3 — Lengkapi Data Diri',
+      'Langkah 4 — Verifikasi WhatsApp',
+      'Langkah 5 — Data Kedinasan',
+      'Langkah 6 — Lengkapi Data',
+      'Langkah 7 — Verifikasi Data',
+      'Langkah 8 — Persetujuan dan Submit',
     ],
     pembaruan: [
-      '📌 Langkah 1\nBuka daftar sertifikat pada aplikasi AMS.',
-      '📌 Langkah 2\nPilih sertifikat yang akan dilakukan pembaharuan.',
-      '📌 Langkah 3\nIkuti proses konfirmasi pembaharuan pada aplikasi AMS.',
-      '📌 Langkah 4\nLakukan proses Set Passphrase sesuai instruksi AMS.',
-      '📌 Langkah 5\nPastikan proses pembaharuan telah selesai.',
+      'Langkah 1 — Pembaharuan Sertifikat (Juknis Hlm. 38)',
+      'Langkah 2 — Proses Pembaharuan Sertifikat (Juknis Hlm. 39)',
+      'Informasi Sertifikat Expired — Pembaharuan Tidak Dapat Dilakukan (Juknis Hlm. 40)',
+      'Arahan Pengajuan Sertifikat Baru (Juknis Hlm. 41)',
     ],
     passphrase: [
-      '🔑 Langkah 1/5: Buka daftar sertifikat',
-      '🔑 Langkah 2/5: Pilih Reset Passphrase',
-      '🔑 Langkah 3/5: Cek email untuk link reset',
-      '🔑 Langkah 4/5: Pengecekan foto',
-      '🔑 Langkah 5/5: Buat passphrase baru',
+      'Langkah 1 — Reset Passphrase (Juknis Hlm. 44)',
+      'Langkah 2 — Pembuatan Passphrase Baru (Juknis Hlm. 45)',
     ],
   },
 
