@@ -1,0 +1,285 @@
+{
+  "metadata": {
+    "generatedAt": "2026-09-17T01:54:06.666Z",
+    "projectPath": "C:\\Users\\HP 240\\Downloads\\chatbot-main",
+    "nodeVersion": "v22.16.0",
+    "platform": "win32 x64",
+    "pid": 16716,
+    "projectVersion": "1.0.0 (Tahap 1-6 Final)"
+  },
+  "metrics": {
+    "startup": {
+      "timestamp": "2026-09-17T01:52:19.464Z",
+      "uptimeSec": 0.5,
+      "tag": "STARTUP_COMPLETE",
+      "rssMB": 44.76,
+      "heapUsedMB": 4.91,
+      "heapTotalMB": 5.56,
+      "externalMB": 1.45,
+      "arrayBuffersMB": 0.01,
+      "userCpuPercent": 5.58,
+      "systemCpuPercent": 0,
+      "totalCpuPercent": 5.58,
+      "activeSessions": 0
+    },
+    "idle": {
+      "count": 5,
+      "avgRssMB": 45.22,
+      "avgHeapUsedMB": 4.45,
+      "avgCpuPercent": 0,
+      "maxRssMB": 45.23,
+      "maxHeapUsedMB": 4.47,
+      "maxCpuPercent": 0,
+      "maxExternalMB": 1.45,
+      "latest": {
+        "timestamp": "2026-09-17T01:52:24.496Z",
+        "uptimeSec": 5.5,
+        "tag": "IDLE_BASELINE",
+        "rssMB": 45.23,
+        "heapUsedMB": 4.47,
+        "heapTotalMB": 6.56,
+        "externalMB": 1.45,
+        "arrayBuffersMB": 0.01,
+        "userCpuPercent": 0,
+        "systemCpuPercent": 0,
+        "totalCpuPercent": 0,
+        "activeSessions": 0
+      }
+    },
+    "menu1": {
+      "timestamp": "2026-09-17T01:52:46.864Z",
+      "uptimeSec": 27.9,
+      "tag": "MENU1_COMPLETE",
+      "rssMB": 46.37,
+      "heapUsedMB": 4.71,
+      "heapTotalMB": 6.56,
+      "externalMB": 2.38,
+      "arrayBuffersMB": 0.93,
+      "userCpuPercent": 0.14,
+      "systemCpuPercent": 0.14,
+      "totalCpuPercent": 0.28,
+      "activeSessions": 1
+    },
+    "menu2": {
+      "timestamp": "2026-09-17T01:52:54.120Z",
+      "uptimeSec": 35.1,
+      "tag": "MENU2_COMPLETE",
+      "rssMB": 46.43,
+      "heapUsedMB": 4.76,
+      "heapTotalMB": 6.56,
+      "externalMB": 2.38,
+      "arrayBuffersMB": 0.93,
+      "userCpuPercent": 0,
+      "systemCpuPercent": 0,
+      "totalCpuPercent": 0,
+      "activeSessions": 2
+    },
+    "menu3": {
+      "timestamp": "2026-09-17T01:53:03.363Z",
+      "uptimeSec": 44.4,
+      "tag": "MENU3_COMPLETE",
+      "rssMB": 46.75,
+      "heapUsedMB": 4.86,
+      "heapTotalMB": 6.56,
+      "externalMB": 2.62,
+      "arrayBuffersMB": 1.17,
+      "userCpuPercent": 0,
+      "systemCpuPercent": 0.17,
+      "totalCpuPercent": 0.17,
+      "activeSessions": 3
+    },
+    "menu4": {
+      "timestamp": "2026-09-17T01:53:08.218Z",
+      "uptimeSec": 49.2,
+      "tag": "MENU4_COMPLETE",
+      "rssMB": 46.76,
+      "heapUsedMB": 4.91,
+      "heapTotalMB": 6.56,
+      "externalMB": 2.62,
+      "arrayBuffersMB": 1.17,
+      "userCpuPercent": 0,
+      "systemCpuPercent": 0,
+      "totalCpuPercent": 0,
+      "activeSessions": 4
+    },
+    "settled": {
+      "count": 5,
+      "avgRssMB": 46.81,
+      "avgHeapUsedMB": 4.92,
+      "avgCpuPercent": 0,
+      "maxRssMB": 46.82,
+      "maxHeapUsedMB": 4.93,
+      "maxCpuPercent": 0,
+      "maxExternalMB": 2.62,
+      "latest": {
+        "timestamp": "2026-09-17T01:53:13.270Z",
+        "uptimeSec": 54.3,
+        "tag": "SETTLED_POST_MEDIA",
+        "rssMB": 46.82,
+        "heapUsedMB": 4.93,
+        "heapTotalMB": 6.56,
+        "externalMB": 2.62,
+        "arrayBuffersMB": 1.17,
+        "userCpuPercent": 0,
+        "systemCpuPercent": 0,
+        "totalCpuPercent": 0,
+        "activeSessions": 4
+      }
+    },
+    "scaling": [
+      {
+        "users": 1,
+        "timestamp": "2026-09-17T01:53:18.294Z",
+        "uptimeSec": 59.3,
+        "tag": "SCALE_1_USER",
+        "rssMB": 46.82,
+        "heapUsedMB": 4.98,
+        "heapTotalMB": 6.56,
+        "externalMB": 2.62,
+        "arrayBuffersMB": 1.18,
+        "userCpuPercent": 0,
+        "systemCpuPercent": 0,
+        "totalCpuPercent": 0,
+        "activeSessions": 1
+      },
+      {
+        "users": 3,
+        "timestamp": "2026-09-17T01:53:23.329Z",
+        "uptimeSec": 64.3,
+        "tag": "SCALE_3_USERS",
+        "rssMB": 46.1,
+        "heapUsedMB": 4.63,
+        "heapTotalMB": 6.06,
+        "externalMB": 2.64,
+        "arrayBuffersMB": 0.01,
+        "userCpuPercent": 0,
+        "systemCpuPercent": 0.32,
+        "totalCpuPercent": 0.32,
+        "activeSessions": 3
+      },
+      {
+        "users": 5,
+        "timestamp": "2026-09-17T01:53:28.367Z",
+        "uptimeSec": 69.4,
+        "tag": "SCALE_5_USERS",
+        "rssMB": 46.14,
+        "heapUsedMB": 4.71,
+        "heapTotalMB": 6.06,
+        "externalMB": 1.47,
+        "arrayBuffersMB": 0.03,
+        "userCpuPercent": 0,
+        "systemCpuPercent": 0.3,
+        "totalCpuPercent": 0.3,
+        "activeSessions": 5
+      },
+      {
+        "users": 10,
+        "timestamp": "2026-09-17T01:53:33.916Z",
+        "uptimeSec": 74.9,
+        "tag": "SCALE_10_USERS",
+        "rssMB": 44.37,
+        "heapUsedMB": 4.5,
+        "heapTotalMB": 5.81,
+        "externalMB": 1.5,
+        "arrayBuffersMB": 0.05,
+        "userCpuPercent": 0.29,
+        "systemCpuPercent": 0.58,
+        "totalCpuPercent": 0.87,
+        "activeSessions": 10
+      }
+    ],
+    "cycleStability": {
+      "firstCycle": {
+        "cycle": 1,
+        "rssMB": 44.42,
+        "heapUsedMB": 4.53,
+        "extMB": 1.5
+      },
+      "lastCycle": {
+        "cycle": 10,
+        "rssMB": 33.99,
+        "heapUsedMB": 4.74,
+        "extMB": 1.51
+      },
+      "deltaRssMB": -10.43,
+      "deltaHeapMB": 0.21,
+      "allCycles": [
+        {
+          "cycle": 1,
+          "rssMB": 44.42,
+          "heapUsedMB": 4.53,
+          "extMB": 1.5
+        },
+        {
+          "cycle": 2,
+          "rssMB": 44.42,
+          "heapUsedMB": 4.55,
+          "extMB": 1.5
+        },
+        {
+          "cycle": 3,
+          "rssMB": 44.5,
+          "heapUsedMB": 4.58,
+          "extMB": 1.5
+        },
+        {
+          "cycle": 4,
+          "rssMB": 44.5,
+          "heapUsedMB": 4.6,
+          "extMB": 1.5
+        },
+        {
+          "cycle": 5,
+          "rssMB": 44.5,
+          "heapUsedMB": 4.63,
+          "extMB": 1.5
+        },
+        {
+          "cycle": 6,
+          "rssMB": 33.97,
+          "heapUsedMB": 4.65,
+          "extMB": 1.5
+        },
+        {
+          "cycle": 7,
+          "rssMB": 33.97,
+          "heapUsedMB": 4.67,
+          "extMB": 1.51
+        },
+        {
+          "cycle": 8,
+          "rssMB": 33.97,
+          "heapUsedMB": 4.7,
+          "extMB": 1.51
+        },
+        {
+          "cycle": 9,
+          "rssMB": 33.98,
+          "heapUsedMB": 4.72,
+          "extMB": 1.51
+        },
+        {
+          "cycle": 10,
+          "rssMB": 33.99,
+          "heapUsedMB": 4.74,
+          "extMB": 1.51
+        }
+      ]
+    },
+    "cleanup": {
+      "beforeSessions": 20,
+      "afterSessions": 0,
+      "cleanedCount": 20,
+      "preCleanupHeapUsedMB": 4.75,
+      "postCleanupHeapUsedMB": 4.79,
+      "postCleanupRssMB": 34.08
+    },
+    "overall": {
+      "peakRssMB": 46.82,
+      "peakHeapUsedMB": 4.98,
+      "peakExternalMB": 2.64,
+      "peakCpuPercent": 5.58,
+      "avgCpuPercent": 0.24
+    }
+  }
+}

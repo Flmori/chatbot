@@ -5,6 +5,68 @@ Chatbot WhatsApp resmi untuk memandu aparatur sipil negara (ASN) dan pengguna la
 
 ---
 
+## Kebutuhan Sistem
+
+### 1. Runtime
+- **Node.js**: Versi `v22.x` direkomendasikan sebagai runtime utama yang telah teruji pada lingkungan benchmark dan operasional.
+- **Package Manager**: npm (bawaan Node.js) untuk manajemen dependensi.
+- **Sistem Operasi**: Mendukung berbagai OS yang kompatibel dengan Node.js (Linux, Windows Server, macOS).
+- **Arsitektur**: Mendukung arsitektur `x64` maupun `ARM64`.
+- **Koneksi Jaringan**: Memerlukan koneksi internet yang stabil untuk menjaga komunikasi socket WebSocket Baileys dengan server WhatsApp.
+- **Akun WhatsApp**: Memerlukan smartphone dengan aplikasi WhatsApp aktif untuk pemindaian Kode QR (pairing) pertama kali.
+
+### 2. Kebutuhan Hardware (Rekomendasi Praktis Environment)
+- **CPU**: Prosesor modern yang mampu menjalankan runtime Node.js v22.x secara efisien.
+- **RAM Lingkungan (Environment)**: Direkomendasikan minimal sekitar **1 GB RAM** untuk keseluruhan perangkat/server. Angka ini adalah kapasitas praktis untuk menjalankan sistem operasi, background services, networking stack, dan file cache secara stabil, bukan merupakan konsumsi memori proses chatbot itu sendiri.
+- **Penyimpanan (Storage)**: Ruang kosong minimal sekitar **5 GB** untuk instalasi OS, runtime, dependensi project (`node_modules`), berkas panduan media, dan log sistem.
+- **Ketersediaan Daya**: Perangkat disarankan dapat beroperasi 24/7 apabila chatbot difungsikan sebagai pusat layanan bantuan dinas tanpa henti.
+
+### 3. Hasil Resource Benchmark
+Pengujian konsumsi resource aktual telah dilakukan langsung pada proses chatbot Node.js dengan rincian data sebagai berikut:
+
+| Parameter | Hasil Pengukuran |
+|---|---:|
+| RAM saat idle | 45.22 MB |
+| RAM operasional | 46.37–46.82 MB |
+| Peak RAM proses | 46.82 MB |
+| Peak Heap Used | 4.98 MB |
+| Peak External Memory | 2.64 MB |
+| CPU idle | 0.00% |
+| CPU rata-rata operasional | 0.24% |
+| Concurrent session diuji | 1–10 user |
+| Session cleanup | 20 → 0 session |
+| Repeated cycle | 10 siklus |
+| Indikasi memory leak | Tidak ditemukan |
+
+*(Catatan: Pengujian benchmark dilakukan pada runtime Node.js v22.16.0 / V8 12.9.202.28-node.14 pada arsitektur Windows x64).*
+
+### 4. Interpretasi Benchmark
+Berdasarkan data pengukuran aktual:
+- **Karakteristik Ringan**: Proses chatbot tergolong sangat ringan dengan konsumsi memori fisik (RSS) berada pada kisaran 45.22 MB saat idle dan puncak terukur 46.82 MB saat transmisi berkas dokumen dan panduan gambar.
+- **Skalabilitas Konkuren**: Pengujian konkurensi hingga 10 sesi pengguna bersamaan menunjukkan penggunaan resource yang tetap terkendali pada kisaran 44–46 MB.
+- **Efisiensi Siklus Berulang**: Pengujian 10 siklus interaksi berturut-turut menunjukkan stabilisasi kurva memori (plateau) tanpa adanya indikasi kebocoran memori (*memory leak*).
+- **Siklus Pembersihan Sesi**: Mekanisme session cleanup otomatis berhasil menghapus seluruh 20 sesi kedaluwarsa setelah melampaui batas waktu *idle* sesuai konfigurasi.
+
+### 5. Catatan Penting Mengenai Resource
+> [!NOTE]
+> **Pembedaan Alokasi Memori**:
+> Angka 45.22 MB (idle) dan 46.82 MB (peak) adalah **penggunaan memori fisik aktual dari proses chatbot Node.js** selama pengujian.
+> 
+> Kebutuhan total RAM perangkat/server (rekomendasi minimal 1 GB) tetap diperlukan karena mencakup alokasi kernel sistem operasi, layanan background OS, networking buffer (TCP/TLS), file system page cache, serta alokasi aman (headroom) agar sistem terhindar dari penghentian paksa oleh mekanisme *Out-of-Memory (OOM)*.
+
+### 6. Lingkungan Deployment
+Chatbot AMS dirancang fleksibel dan bersifat agnostik terhadap hardware, sehingga dapat dideploy pada berbagai infrastruktur yang mendukung Node.js, antara lain:
+- Komputer desktop / PC kantor
+- Server lokal dinas (On-Premise Server)
+- Virtual Private Server (VPS) / Cloud Server
+- Mini PC
+- Single-board Computer (SBC)
+- Infrastruktur komputasi lain yang memenuhi prasyarat runtime Node.js dan konektivitas internet stabil.
+
+Pemilihan jenis perangkat keras dapat disesuaikan sepenuhnya dengan kebijakan infrastruktur IT, ketersediaan perangkat, dan skala kebutuhan operasional instansi.
+
+---
+
 ## 1. Ikhtisar Sistem
 
 Sistem ini dirancang sebagai asisten virtual berbasis pesan instan WhatsApp yang menyederhanakan alur birokrasi dan petunjuk teknis (Juknis) menjadi percakapan dua arah yang interaktif, terarah, dan ramah pengguna. Pengguna dapat memperoleh informasi persyaratan, mengunduh dokumen formulir resmi secara langsung, menyimak panduan bergambar langkah-demi-langkah, hingga terhubung langsung dengan petugas verifikator (Live Agen) Dinas Kominfo Blora.
@@ -335,7 +397,7 @@ Administrator atau operator layanan wajib menjalankan pemeliharaan rutin minggua
 
 ## 9. Panduan Instalasi & Menjalankan Bot
 
-### Kebutuhan Sistem:
+### Prasyarat Instalasi:
 - **Node.js**: Versi `>= 18.0.0` (disarankan versi LTS).
 - **NPM**: Versi `>= 9.0.0`.
 - **Aplikasi WhatsApp**: Terinstal pada smartphone dengan nomor telepon dinas yang aktif.
